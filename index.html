@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Strength — 4-Week Block</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --accent: #c8f135;
+    --accent2: #ff4d1c;
+    --text: #f0f0f0;
+    --muted: #555;
+    --squat: #c8f135;
+    --bench: #38bdf8;
+    --dead: #ff4d1c;
+    --rest: #333;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘DM Sans’, sans-serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+padding: 48px 32px 32px;
+border-bottom: 1px solid var(–border);
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 16px;
+}
+
+header h1 {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(52px, 8vw, 96px);
+letter-spacing: 2px;
+line-height: 0.9;
+color: var(–text);
+}
+
+header h1 span { color: var(–accent); }
+
+.header-meta {
+text-align: right;
+}
+
+.header-meta p {
+font-size: 11px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 4px;
+}
+
+.header-meta strong {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 28px;
+letter-spacing: 2px;
+color: var(–accent);
+}
+
+/* LEGEND */
+.legend {
+display: flex;
+gap: 24px;
+padding: 20px 32px;
+border-bottom: 1px solid var(–border);
+flex-wrap: wrap;
+}
+
+.legend-item {
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 12px;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(–muted);
+}
+
+.dot {
+width: 10px;
+height: 10px;
+border-radius: 2px;
+}
+
+/* TABS */
+.tabs {
+display: flex;
+gap: 0;
+padding: 0 32px;
+border-bottom: 1px solid var(–border);
+overflow-x: auto;
+}
+
+.tab {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 18px;
+letter-spacing: 2px;
+padding: 16px 24px;
+cursor: pointer;
+color: var(–muted);
+border-bottom: 3px solid transparent;
+transition: all 0.2s;
+white-space: nowrap;
+background: none;
+border-top: none;
+border-left: none;
+border-right: none;
+}
+
+.tab:hover { color: var(–text); }
+.tab.active { color: var(–accent); border-bottom-color: var(–accent); }
+
+/* MAIN LAYOUT */
+main { padding: 32px; }
+
+/* WEEK GRID */
+.week-grid {
+display: grid;
+grid-template-columns: repeat(7, 1fr);
+gap: 8px;
+margin-bottom: 40px;
+}
+
+.day-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 8px;
+padding: 16px 12px;
+cursor: pointer;
+transition: all 0.2s;
+position: relative;
+overflow: hidden;
+min-height: 100px;
+}
+
+.day-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 3px;
+}
+
+.day-card.squat::before { background: var(–squat); }
+.day-card.bench::before { background: var(–bench); }
+.day-card.dead::before  { background: var(–dead); }
+.day-card.rest::before  { background: var(–rest); }
+
+.day-card:hover:not(.rest) {
+border-color: #333;
+transform: translateY(-2px);
+}
+
+.day-card.active-day {
+border-color: #444;
+background: #161616;
+}
+
+.day-num {
+font-size: 10px;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 8px;
+}
+
+.day-label {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 20px;
+letter-spacing: 1px;
+line-height: 1;
+}
+
+.day-card.squat .day-label { color: var(–squat); }
+.day-card.bench .day-label { color: var(–bench); }
+.day-card.dead  .day-label { color: var(–dead); }
+.day-card.rest  .day-label { color: var(–muted); }
+
+.session-num {
+font-size: 11px;
+color: var(–muted);
+margin-top: 4px;
+}
+
+/* DETAIL PANEL */
+.detail-panel {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+overflow: hidden;
+animation: fadeUp 0.25s ease;
+}
+
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(8px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.panel-header {
+padding: 28px 32px;
+border-bottom: 1px solid var(–border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 12px;
+}
+
+.panel-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 48px;
+letter-spacing: 2px;
+line-height: 1;
+}
+
+.panel-title.squat { color: var(–squat); }
+.panel-title.bench { color: var(–bench); }
+.panel-title.dead  { color: var(–dead); }
+
+.panel-tag {
+font-size: 11px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–muted);
+background: var(–bg);
+padding: 6px 14px;
+border-radius: 4px;
+border: 1px solid var(–border);
+}
+
+/* SETS TABLE */
+.sets-container {
+padding: 28px 32px;
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.block-label {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 4px;
+margin-top: 8px;
+}
+
+.block-label:first-child { margin-top: 0; }
+
+.set-row {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 14px 20px;
+background: var(–bg);
+border-radius: 8px;
+border: 1px solid var(–border);
+transition: border-color 0.15s;
+}
+
+.set-row:hover { border-color: #2a2a2a; }
+
+.set-num {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 13px;
+letter-spacing: 1px;
+color: var(–muted);
+width: 28px;
+flex-shrink: 0;
+}
+
+.rep-range {
+font-size: 15px;
+font-weight: 500;
+color: var(–text);
+flex: 1;
+}
+
+.rep-range span {
+color: var(–muted);
+font-weight: 300;
+font-size: 13px;
+}
+
+.rpe-badge {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 15px;
+letter-spacing: 1px;
+padding: 4px 12px;
+border-radius: 4px;
+min-width: 68px;
+text-align: center;
+}
+
+.rpe-6  { background: #1a2200; color: #8fba1a; border: 1px solid #2d3d00; }
+.rpe-7  { background: #001a2a; color: #38bdf8; border: 1px solid #00304d; }
+.rpe-75 { background: #001a2a; color: #7dd3fc; border: 1px solid #00304d; }
+.rpe-8  { background: #2a1500; color: #f97316; border: 1px solid #4d2800; }
+.rpe-9  { background: #2a0800; color: #ef4444; border: 1px solid #4d1000; }
+.rpe-10 { background: #2a0000; color: #ff0000; border: 1px solid #550000; }
+
+.checkbox {
+width: 18px; height: 18px;
+border: 1px solid var(–border);
+border-radius: 4px;
+cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+transition: all 0.15s;
+background: transparent;
+}
+
+.checkbox.checked {
+background: var(–accent);
+border-color: var(–accent);
+}
+
+.checkbox.checked::after {
+content: ‘✓’;
+font-size: 11px;
+color: #000;
+font-weight: 700;
+}
+
+/* WEEK VIEW toggle */
+.week-nav {
+display: flex;
+align-items: center;
+gap: 16px;
+margin-bottom: 24px;
+}
+
+.week-nav-btn {
+background: var(–surface);
+border: 1px solid var(–border);
+color: var(–text);
+padding: 8px 20px;
+border-radius: 6px;
+cursor: pointer;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 13px;
+transition: all 0.15s;
+}
+
+.week-nav-btn:hover { border-color: #333; background: #161616; }
+
+.week-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 28px;
+letter-spacing: 2px;
+color: var(–text);
+}
+
+/* SESSIONS VIEW */
+.sessions-grid {
+display: none;
+}
+
+.sessions-grid.visible {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 16px;
+}
+
+.session-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 20px;
+cursor: pointer;
+transition: all 0.2s;
+position: relative;
+overflow: hidden;
+}
+
+.session-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 3px;
+}
+
+.session-card.squat::before { background: var(–squat); }
+.session-card.bench::before { background: var(–bench); }
+.session-card.dead::before  { background: var(–dead); }
+
+.session-card:hover {
+border-color: #333;
+transform: translateY(-2px);
+}
+
+.session-card-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 32px;
+letter-spacing: 1px;
+}
+
+.session-card.squat .session-card-title { color: var(–squat); }
+.session-card.bench .session-card-title { color: var(–bench); }
+.session-card.dead  .session-card-title { color: var(–dead); }
+
+.session-card-preview {
+margin-top: 10px;
+display: flex;
+flex-direction: column;
+gap: 4px;
+}
+
+.preview-row {
+display: flex;
+justify-content: space-between;
+font-size: 12px;
+color: var(–muted);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+header { padding: 28px 16px 20px; }
+.tabs { padding: 0 16px; }
+main { padding: 16px; }
+.week-grid { grid-template-columns: repeat(4, 1fr); }
+.panel-header { padding: 20px 16px; }
+.sets-container { padding: 16px; }
+.legend { padding: 16px; }
+}
+
+@media (max-width: 500px) {
+.week-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.hidden { display: none !important; }
+.view { display: none; }
+.view.active { display: block; }
+</style>
+
+</head>
+<body>
+
+<header>
+  <h1>PROJECT<br><span>STRENGTH</span></h1>
+  <div class="header-meta">
+    <p>Training Block</p>
+    <strong>4 Weeks</strong>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot" style="background:var(--squat)"></div> Squat</div>
+  <div class="legend-item"><div class="dot" style="background:var(--bench)"></div> Bench</div>
+  <div class="legend-item"><div class="dot" style="background:var(--dead)"></div> Deadlift</div>
+  <div class="legend-item"><div class="dot" style="background:var(--rest)"></div> Rest</div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('schedule')">Schedule</button>
+  <button class="tab" onclick="switchTab('sessions')">All Sessions</button>
+</div>
+
+<main>
+  <!-- SCHEDULE VIEW -->
+  <div id="view-schedule" class="view active">
+    <div class="week-nav">
+      <button class="week-nav-btn" onclick="prevWeek()">← Prev</button>
+      <div class="week-title" id="week-title">Week 1</div>
+      <button class="week-nav-btn" onclick="nextWeek()">Next →</button>
+    </div>
+
+```
+<div class="week-grid" id="week-grid"></div>
+<div id="detail-panel"></div>
+```
+
+  </div>
+
+  <!-- SESSIONS VIEW -->
+
+  <div id="view-sessions" class="view">
+    <div id="sessions-content"></div>
+    <div id="session-detail-panel" style="margin-top:24px;"></div>
+  </div>
+</main>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+const squatData = [
+  { name: 'Squat 1',  blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'6' },  { reps:'1–3', rpe:'6' }]  },
+  { name: 'Squat 2',  blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'7.5' },{ reps:'1–3', rpe:'6' }]  },
+  { name: 'Squat 3',  blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'7.5' },{ reps:'1–3', rpe:'7.5' }]},
+  { name: 'Squat 4',  blocks: [{ reps:'4–7', rpe:'7.5'},{ reps:'2–5', rpe:'7.5' },{ reps:'1–3', rpe:'7.5' }]},
+  { name: 'Squat 5',  blocks: [{ reps:'4–7', rpe:'7.5'},{ reps:'2–5', rpe:'9' },  { reps:'1–3', rpe:'7.5' }]},
+  { name: 'Squat 6',  blocks: [{ reps:'4–7', rpe:'9' }, { reps:'2–5', rpe:'9' },  { reps:'1–3', rpe:'9' }]  },
+];
+
+const benchData = [
+  { name: 'Bench 1',  blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'6' }, { reps:'1–3', rpe:'6' }]  },
+  { name: 'Bench 2',  blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'7' }, { reps:'1–3', rpe:'6' }]  },
+  { name: 'Bench 3',  blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'7' }, { reps:'1–3', rpe:'7' }]  },
+  { name: 'Bench 4',  blocks: [{ reps:'4–7', rpe:'7' }, { reps:'2–5', rpe:'7' }, { reps:'1–3', rpe:'7' }]  },
+  { name: 'Bench 5',  blocks: [{ reps:'4–7', rpe:'7' }, { reps:'2–5', rpe:'8' }, { reps:'1–3', rpe:'7' }]  },
+  { name: 'Bench 6',  blocks: [{ reps:'4–7', rpe:'7' }, { reps:'2–5', rpe:'8' }, { reps:'1–3', rpe:'8' }]  },
+  { name: 'Bench 7',  blocks: [{ reps:'4–7', rpe:'8' }, { reps:'2–5', rpe:'8' }, { reps:'1–3', rpe:'8' }]  },
+  { name: 'Bench 8',  blocks: [{ reps:'4–7', rpe:'8' }, { reps:'2–5', rpe:'9' }, { reps:'1–3', rpe:'8' }]  },
+  { name: 'Bench 9',  blocks: [{ reps:'4–7', rpe:'8' }, { reps:'2–5', rpe:'9' }, { reps:'1–3', rpe:'9' }]  },
+  { name: 'Bench 10', blocks: [{ reps:'4–7', rpe:'9' }, { reps:'2–5', rpe:'9' }, { reps:'1–3', rpe:'9' }]  },
+  { name: 'Bench 11', blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'6' }, { reps:'1–3', rpe:'6' }]  },
+  { name: 'Bench 12', blocks: [{ reps:'4–7', rpe:'10'},{ reps:'2–5', rpe:'10'},  { reps:'1–3', rpe:'10' }]  },
+];
+
+const deadData = [
+  { name: 'Deadlift 1', blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'6' },  { reps:'1–3', rpe:'6' }]  },
+  { name: 'Deadlift 2', blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'7.5' },{ reps:'1–3', rpe:'6' }]  },
+  { name: 'Deadlift 3', blocks: [{ reps:'4–7', rpe:'6' }, { reps:'2–5', rpe:'7.5' },{ reps:'1–3', rpe:'7.5' }]},
+  { name: 'Deadlift 4', blocks: [{ reps:'4–7', rpe:'7.5'},{ reps:'2–5', rpe:'7.5' },{ reps:'1–3', rpe:'7.5' }]},
+  { name: 'Deadlift 5', blocks: [{ reps:'4–7', rpe:'7.5'},{ reps:'2–5', rpe:'9' },  { reps:'1–3', rpe:'7.5' }]},
+  { name: 'Deadlift 6', blocks: [{ reps:'4–7', rpe:'9' }, { reps:'2–5', rpe:'9' },  { reps:'1–3', rpe:'9' }]  },
+];
+
+// 4-week schedule (28 days)
+// W1: S1, B1, D1, B2, rest, S2, B3
+// W2: D2, B4, rest, S3, B5, D3, B6
+// W3: S4, B7, D4, B8, rest, S5, B9
+// W4: D5, B10, rest, S6, B11, D6, B12
+const schedule = [
+  // Week 1
+  { type:'squat', idx:0 }, { type:'bench', idx:0 }, { type:'dead', idx:0 },
+  { type:'bench', idx:1 }, { type:'rest' }, { type:'squat', idx:1 }, { type:'bench', idx:2 },
+  // Week 2
+  { type:'dead', idx:1 }, { type:'bench', idx:3 }, { type:'rest' },
+  { type:'squat', idx:2 }, { type:'bench', idx:4 }, { type:'dead', idx:2 }, { type:'bench', idx:5 },
+  // Week 3
+  { type:'squat', idx:3 }, { type:'bench', idx:6 }, { type:'dead', idx:3 },
+  { type:'bench', idx:7 }, { type:'rest' }, { type:'squat', idx:4 }, { type:'bench', idx:8 },
+  // Week 4
+  { type:'dead', idx:4 }, { type:'bench', idx:9 }, { type:'rest' },
+  { type:'squat', idx:5 }, { type:'bench', idx:10 }, { type:'dead', idx:5 }, { type:'bench', idx:11 },
+];
+
+const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentWeek = 0;
+let selectedDay = null;
+let checkedSets = {};
+
+function getSession(entry) {
+  if (entry.type === 'rest') return null;
+  if (entry.type === 'squat') return squatData[entry.idx];
+  if (entry.type === 'bench') return benchData[entry.idx];
+  if (entry.type === 'dead')  return deadData[entry.idx];
+}
+
+function rpeClass(rpe) {
+  const map = { '6':'rpe-6','7':'rpe-7','7.5':'rpe-75','8':'rpe-8','9':'rpe-9','10':'rpe-10' };
+  return map[rpe] || 'rpe-6';
+}
+
+function renderSetKey(sessionName, blockIdx, setIdx) {
+  return `${sessionName}_${blockIdx}_${setIdx}`;
+}
+
+// ─── RENDER WEEK ─────────────────────────────────────────────────────────────
+function renderWeek() {
+  const grid = document.getElementById('week-grid');
+  document.getElementById('week-title').textContent = `Week ${currentWeek + 1}`;
+  grid.innerHTML = '';
+
+  const weekDays = schedule.slice(currentWeek * 7, currentWeek * 7 + 7);
+
+  weekDays.forEach((entry, i) => {
+    const globalIdx = currentWeek * 7 + i;
+    const session = getSession(entry);
+    const card = document.createElement('div');
+    card.className = `day-card ${entry.type === 'rest' ? 'rest' : entry.type}`;
+    if (selectedDay === globalIdx) card.classList.add('active-day');
+
+    const label = session ? session.name : 'Rest';
+    const short = entry.type === 'squat' ? 'SQ' : entry.type === 'bench' ? 'BP' : entry.type === 'dead' ? 'DL' : '—';
+
+    card.innerHTML = `
+      <div class="day-num">Day ${i + 1} · ${dayNames[i]}</div>
+      <div class="day-label">${entry.type === 'rest' ? 'Rest' : short}</div>
+      <div class="session-num">${session ? session.name : ''}</div>
+    `;
+
+    if (entry.type !== 'rest') {
+      card.onclick = () => {
+        selectedDay = globalIdx;
+        renderWeek();
+        renderDetail(entry, globalIdx);
+      };
+    }
+
+    grid.appendChild(card);
+  });
+
+  if (selectedDay === null || Math.floor(selectedDay / 7) !== currentWeek) {
+    document.getElementById('detail-panel').innerHTML = '';
+    selectedDay = null;
+  }
+}
+
+// ─── RENDER DETAIL ────────────────────────────────────────────────────────────
+function renderDetail(entry, globalIdx) {
+  const session = getSession(entry);
+  if (!session) return;
+
+  const panel = document.getElementById('detail-panel');
+  const typeClass = entry.type === 'dead' ? 'dead' : entry.type;
+
+  let setsHTML = '';
+  let globalSet = 1;
+
+  session.blocks.forEach((block, bi) => {
+    const blockLabels = ['Heavy Block', 'Medium Block', 'Light Block'];
+    setsHTML += `<div class="block-label">${blockLabels[bi]} — ${block.reps} reps</div>`;
+
+    for (let s = 0; s < 2; s++) {
+      const key = renderSetKey(session.name, bi, s);
+      const checked = checkedSets[key] ? 'checked' : '';
+      setsHTML += `
+        <div class="set-row">
+          <div class="set-num">S${globalSet}</div>
+          <div class="rep-range">${block.reps} <span>reps</span></div>
+          <div class="rpe-badge ${rpeClass(block.rpe)}">RPE ${block.rpe}</div>
+          <div class="checkbox ${checked}" onclick="toggleSet('${key}', this)"></div>
+        </div>
+      `;
+      globalSet++;
+    }
+  });
+
+  panel.innerHTML = `
+    <div class="detail-panel">
+      <div class="panel-header">
+        <div class="panel-title ${typeClass}">${session.name}</div>
+        <div class="panel-tag">6 sets · 3 blocks</div>
+      </div>
+      <div class="sets-container">${setsHTML}</div>
+    </div>
+  `;
+}
+
+function toggleSet(key, el) {
+  checkedSets[key] = !checkedSets[key];
+  el.classList.toggle('checked', checkedSets[key]);
+}
+
+// ─── WEEK NAV ─────────────────────────────────────────────────────────────────
+function prevWeek() {
+  if (currentWeek > 0) { currentWeek--; selectedDay = null; renderWeek(); }
+}
+function nextWeek() {
+  if (currentWeek < 3) { currentWeek++; selectedDay = null; renderWeek(); }
+}
+
+// ─── SESSIONS VIEW ────────────────────────────────────────────────────────────
+function renderSessionsView() {
+  const container = document.getElementById('sessions-content');
+  const allSessions = [
+    { label: 'Squat', data: squatData, type: 'squat' },
+    { label: 'Bench', data: benchData, type: 'bench' },
+    { label: 'Deadlift', data: deadData, type: 'dead' },
+  ];
+
+  let html = '';
+  allSessions.forEach(group => {
+    html += `
+      <div style="margin-bottom:32px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:4px;color:var(--muted);margin-bottom:12px;">${group.label}</div>
+        <div class="sessions-grid visible">
+    `;
+    group.data.forEach((session, idx) => {
+      html += `
+        <div class="session-card ${group.type}" onclick="showSessionDetail('${group.type}', ${idx})">
+          <div class="session-card-title">${session.name}</div>
+          <div class="session-card-preview">
+            ${session.blocks.map(b => `
+              <div class="preview-row">
+                <span>2 × ${b.reps} reps</span>
+                <span style="color:var(--accent${group.type === 'bench' ? '' : '2'})">RPE ${b.rpe}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    });
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function showSessionDetail(type, idx) {
+  const session = type === 'squat' ? squatData[idx] : type === 'bench' ? benchData[idx] : deadData[idx];
+  const entry = { type };
+  document.getElementById('session-detail-panel').innerHTML = '';
+
+  const fake = { type, idx };
+  const panel = document.getElementById('session-detail-panel');
+  const typeClass = type === 'dead' ? 'dead' : type;
+
+  let setsHTML = '';
+  let globalSet = 1;
+  const blockLabels = ['Heavy Block', 'Medium Block', 'Light Block'];
+
+  session.blocks.forEach((block, bi) => {
+    setsHTML += `<div class="block-label">${blockLabels[bi]} — ${block.reps} reps</div>`;
+    for (let s = 0; s < 2; s++) {
+      const key = `detail_${session.name}_${bi}_${s}`;
+      const checked = checkedSets[key] ? 'checked' : '';
+      setsHTML += `
+        <div class="set-row">
+          <div class="set-num">S${globalSet}</div>
+          <div class="rep-range">${block.reps} <span>reps</span></div>
+          <div class="rpe-badge ${rpeClass(block.rpe)}">RPE ${block.rpe}</div>
+          <div class="checkbox ${checked}" onclick="toggleSet('${key}', this)"></div>
+        </div>
+      `;
+      globalSet++;
+    }
+  });
+
+  panel.innerHTML = `
+    <div class="detail-panel">
+      <div class="panel-header">
+        <div class="panel-title ${typeClass}">${session.name}</div>
+        <div class="panel-tag">6 sets · 3 blocks</div>
+      </div>
+      <div class="sets-container">${setsHTML}</div>
+    </div>
+  `;
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`view-${tab}`).classList.add('active');
+  if (tab === 'sessions') renderSessionsView();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderWeek();
+</script>
+
+</body>
+</html>
